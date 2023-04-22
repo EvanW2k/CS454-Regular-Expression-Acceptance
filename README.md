@@ -9,3 +9,9 @@ Three steps are involved in solving this problem:
 1) convert the regular expression to an E-NFA 
 2) remove E-moves and 
 3) Test if w is accepted by the E-free NFA.
+
+
+Possible solutions:
+1) turn RE into a tree
+2) RE -> E-NFA -> NFA
+3) Check w by parse RE for each character 
