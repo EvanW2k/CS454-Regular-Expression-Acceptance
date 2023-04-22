@@ -12,6 +12,7 @@ Three steps are involved in solving this problem:
 
 
 Possible solutions:
-1) turn RE into a tree
+1) turn RE into a tree, BFS tree with w
 2) RE -> E-NFA -> NFA
-3) Check w by parse RE for each character 
+  i) Slide 24: Create NFA objects, that you can combine via function: combine (NFA1, NFA2, operation)
+4) Check w by parse RE for each character 
