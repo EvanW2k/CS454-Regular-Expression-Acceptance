@@ -1,38 +1,75 @@
+/* 
+ * main.cpp
+ * 
+ * CS-454 Final Project
+ * Evan Walters, Sean Sponsler
+ * Date: May 15th, 2023
+ * Description: Takes input of a Regular Expression as well as a string.
+ *  Determnines if the string is accepted by the Regualar Expression
+ * 
+ */
+
 #include <iostream>
+#include <string>
+#include <vector>
 using namespace std;
 
 /*
-    2 inputs
-    1) RE as string, with () > U > . > *
-    2) String w to test acceptance
+    2 inputs----------
+        1) RE as string, with () > U > . > *
+        2) String w to test acceptance
 
     Three steps are involved in solving this problem:
-
-    1. convert the regular expression to an E-NFA
-    2. remove E-moves and
-    3. Test if w is accepted by the E-free NFA.
+        1. convert the regular expression to an E-NFA
+            - first create prefix string of RE
+            - than create and combine NFA objects through prefix string
+        2. remove E-moves 
+        3. Test if w is accepted by the E-free NFA.
 */
 
 int main() {
-    string RE = "";
-    cout << "Enter regular expression in a single line (U, E acknowledged as union operator, epsilon): " << endl;
-    cin >> RE;
-    //confirm readable RE
-    for (int i = 0; i < RE.length(); i++) {
-        if (RE[i] == 'U' || RE[i] == 'E') { //only allowed uppercase symbol
-            continue;
-        }
-        else if (isalpha(RE[i])) {
-            RE[i] = tolower(RE[i]);
-        }
-        /*
-        if (RE[i] != '(' || RE[i] != ')' || RE[i] != '.' || RE[i] != '*') {
-            cerr << "Invalid input. Allowed characters [a-z, A-Z, (), ., *, U]" << endl;
-            exit(1);
-        }
-        */
-    }
 
+    // get RE input
+    string RE = "";
+    bool readable = true;
+
+    // loop until
+    do {
+
+        // for new user input
+        if (!readable)
+            cout << "Please renter your Regualr Expression. Remember the rules.\n";
+
+        // prompt and rules
+        cout << "Enter regular expression in a single line with these rules:\n"
+            << "1. \"U\" = union, \".\" = concatination, \"*\" = kleen star, \"&\" = epsilon), \"(\" and \")\" are parenthesis\n"
+            << "2. Must use \".\" wherever possible to distiunguish symbols, and symbols can only be lowercase w/ or w/o numbers\n\n" 
+            << "Enter Regular Expression: ";
+
+        cin >> RE;
+
+        //confirm readable RE
+        for (int i = 0; i < RE.length(); i++) {
+            if (RE[i] == 'U' || RE[i] == '&') { //only allowed uppercase symbol
+                continue;
+            }
+            else if (isalpha(RE[i])) {
+                RE[i] = tolower(RE[i]);
+            }
+            /*
+            if (RE[i] != '(' || RE[i] != ')' || RE[i] != '.' || RE[i] != '*') {
+                cerr << "Invalid input. Allowed characters [a-z, A-Z, (), ., *, U]" << endl;
+                exit(1);
+            }
+            */
+        }
+
+
+    } while (!readable);
+
+
+
+    // get string to test in RE
     string w = "";
     cout << "Enter string w to be tested against given regular expression: " << endl;
     cin >> w;
@@ -46,4 +83,6 @@ int main() {
             exit(1);
         }
     }
+
+    return 0;
 }
