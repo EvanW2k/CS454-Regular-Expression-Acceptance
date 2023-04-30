@@ -163,7 +163,7 @@ string infixToPostfix(string RE) {
 }
 
 string infixToPrefix(string RE) {
+    string output = "";
     
-    
-    
+    return output;   
 }
