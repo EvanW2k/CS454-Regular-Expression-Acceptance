@@ -16,81 +16,89 @@ int precedence(char C)
     return -1;
 }
 
-string infixToPrefix(string infix)
-{
-    stack<char> s;
-    string prefix;
-    reverse(infix.begin(), infix.end());
+string infixToPrefix(string infix) {
+    stack <char> s;
+    string output = "";
 
-    for (int i = 0; i < infix.length(); i++) {
-        if (infix[i] == '(') {
-            infix[i] = ')';
-        }
-        else if (infix[i] == ')') {
-            infix[i] = '(';
-        }
+    // reverse string
+    reverse(RE.begin(), RE.end());
+
+    // replace '(' with ')' and vica versa
+    for (int i = 0; i < RE.length(); i++) {
+        if (RE[i] == '(')
+            RE[i] = ')';
+        else if (RE[i] == ')')
+            RE[i] = '(';
     }
-    for (int i = 0; i < infix.length(); i++) {
-        if (isalpha(infix[i])) {
-            prefix += infix[i];
+
+    // iterate over reveresed RE
+    for (int i = 0; i < RE.length(); i++) {
+
+        // put symbols onto output string
+        if (isalpha(RE[i]) || isdigit(RE[i])) {
+            output += RE[i];
         }
-        else if (infix[i] == '(') {
-            s.push(infix[i]);
+        // put ( on stack
+        else if (RE[i] == '(') {
+            s.push(RE[i]);
         }
-        else if (infix[i] == ')') {
+        // put everything from stack onto output until (
+        else if (RE[i] == ')') {
             while ((s.top() != '(') && (!s.empty())) {
-                prefix += s.top();
+                output += s.top();
                 s.pop();
             }
-
             if (s.top() == '(') {
                 s.pop();
             }
         }
-        else if (isOperator(infix[i])) {
+        // in case of operator
+        else if (isOp(RE[i])) {
+            
+            // when stack is empty just push
             if (s.empty()) {
-                s.push(infix[i]);
+                s.push(RE[i]);
             }
+
             else {
-                if (precedence(infix[i]) > precedence(s.top())) {
-                    s.push(infix[i]);
+                // put current symbol on stack if prio > top of stack
+                if (prio(RE[i]) > prio(s.top())) {
+                    s.push(RE[i]);
                 }
-                else if ((precedence(infix[i]) == precedence(s.top()))
-                    && (infix[i] == '^')) {
-                    while ((precedence(infix[i]) == precedence(s.top()))
-                        && (infix[i] == '^')) {
-                        prefix += s.top();
+                // pop stack onto output until * higher than prio on stack 
+                else if ((prio(RE[i]) >= prio(s.top())) && (RE[i] == '*')) {
+                    while ((prio(RE[i]) >= prio(s.top())) && (RE[i] == '*')) {
+                        output += s.top();
                         s.pop();
                     }
-                    s.push(infix[i]);
+                    s.push(RE[i]);  // after word put * on stack
                 }
-                else if (precedence(infix[i]) == precedence(s.top())) {
-                    s.push(infix[i]);
+
+                // if same put on stack
+                else if (prio(RE[i]) == prio(s.top())) {
+                    s.push(RE[i]);
                 }
+
+                // while top of stack has prio > current, pop onto output
                 else {
-                    while ((!s.empty()) && (precedence(infix[i]) < precedence(s.top()))) {
-                        prefix += s.top();
+                    while ((!s.empty()) && (prio(RE[i]) < prio(s.top()))) {
+                        output += s.top();
                         s.pop();
                     }
-                    s.push(infix[i]);
+                    s.push(RE[i]);  // after push current to stack
                 }
             }
         }
     }
 
+    // pop rest of stack onto output
     while (!s.empty()) {
-        prefix += s.top();
+        output += s.top();
         s.pop();
     }
 
-    reverse(prefix.begin(), prefix.end());
-    return prefix;
-}
+    // reverse string to get prefix
+    reverse(output.begin(), output.end());
 
-int main() {
-    string RE = "(A+B.C)*";
-    string prefix = infixToPrefix(RE);
-
-    cout << prefix << endl;
-    return 0;
+    return output;
 }
