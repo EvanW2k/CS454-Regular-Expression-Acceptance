@@ -1,11 +1,11 @@
 #include "NFA.hpp"
 using namespace std;
 
-bool isOperator(char C) {
+bool isOp(char C) {
     return (C == '+' || C == '.' || C == '*') ? true : false;
 }
 
-int precedence(char C)
+int prio(char C)
 {
     if (C == '*')
         return 1;
@@ -66,8 +66,8 @@ string infixToPrefix(string infix) {
                     s.push(RE[i]);
                 }
                 // pop stack onto output until * higher than prio on stack 
-                else if ((prio(RE[i]) >= prio(s.top())) && (RE[i] == '*')) {
-                    while ((prio(RE[i]) >= prio(s.top())) && (RE[i] == '*')) {
+                else if ((prio(RE[i]) == prio(s.top())) && (RE[i] == '*')) {
+                    while ((!s.empty()) && (prio(RE[i]) == prio(s.top())) && (RE[i] == '*')) {
                         output += s.top();
                         s.pop();
                     }
