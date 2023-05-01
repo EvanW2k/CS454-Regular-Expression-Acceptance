@@ -9,10 +9,7 @@
  * 
  */
 
-#include <iostream>
-#include <string>
-#include <stack>
-#include <vector>
+#include "NFA.hpp"
 using namespace std;
 
 int priority(char C);
@@ -34,6 +31,9 @@ string infixToPrefix(string RE);
 */
 
 int main() {
+    cout << "test" << endl;
+    string RE = "x+y*z/w+u";
+
 
     // get RE input
     string RE = "";
@@ -48,7 +48,7 @@ int main() {
 
         // prompt and rules
         cout << "Enter regular expression in a single line with these rules:\n"
-            << "1. \"+\" = union, \".\" = concatination, \"*\" = kleen star, \"&\" = epsilon), \"(\" and \")\" are parenthesis\n"
+            << "1. \"+\" = union, \".\" = concatination, \"*\" = kleene star, \"&\" = epsilon), \"(\" and \")\" are parenthesis\n"
             << "2. Must use \".\" wherever possible to distiunguish symbols, and symbols can only be lowercase w/ or w/o numbers\n\n" 
             << "Enter Regular Expression: ";
 
@@ -70,9 +70,7 @@ int main() {
             */
         }
 
-
     } while (!readable);
-
 
 
     // get string to test in RE
@@ -100,18 +98,16 @@ int priority(char C) {
         return 2;
     else if (C == '+')
         return 3;
-    return 0;
+    return -1;
 }
 
 bool isOperator(char C) {
-    if (C == '+' || C == '.' || C == '*')
-        return true;
-    return false;
+    return (C == '+' || C == '.' || C == '*' || C == '(' || C == ')') ? true : false;
 }
 
 string infixToPostfix(string RE) {
     RE = '(' + RE + ')';
-    int l = RE.size();
+    int l = RE.length();
     stack<char> charStack;
     string output = "";
 
@@ -138,17 +134,18 @@ string infixToPostfix(string RE) {
         // when op is found
         else {
             if (isOperator(charStack.top())) {
-                /*if (RE == ) {
-                    while () {
-
+                if (RE[i] == '*') {
+                    while (priority(RE[i]) <= charStack.top()) {
+                        output += charStack.top();
+                        charStack.pop();
                     }
                 }
                 else {
-                    while () {
-
+                    while (priority(RE[i]) < charStack.top()) {
+                        output += charStack.top();
+                        charStack.pop();
                     }
-                }*/
-
+                }
                 charStack.push(RE[i]);
             }
         }
@@ -163,7 +160,20 @@ string infixToPostfix(string RE) {
 }
 
 string infixToPrefix(string RE) {
-    string output = "";
-    
-    return output;   
+    //Reverse string and swap ( with ), etc
+    //get postfix
+    //reverse postfix
+    int l = RE.length();
+
+    //reverse infix
+    reverse(RE.begin(), RE.end());
+
+    //Replace ( with ) VV
+    for (int i = 0; i < l; i++) {
+        if (RE[i] == '(') RE[i] = ')';
+        else if (RE[i] == ')') RE[i] = '(';
+    }
+    string prefix = infixToPostfix(RE);
+    reverse(prefix.begin(), prefix.end());
+    return prefix;
 }
