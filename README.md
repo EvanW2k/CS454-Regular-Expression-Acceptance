@@ -10,6 +10,10 @@ Three steps are involved in solving this problem:
 2) remove E-moves and 
 3) Test if w is accepted by the E-free NFA.
 
+Solution:
+RE -> E-NFA -> NFA
+parse through given NFA and convert into smaller NFAs given operator precedence
+
 
 Possible solutions:
 1) turn RE into a tree, BFS tree with w
