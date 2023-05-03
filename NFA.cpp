@@ -16,7 +16,7 @@ int prio(char C)
     return -1;
 }
 
-string infixToPrefix(string infix) {
+string infixToPrefix(string RE) {
     stack <char> s;
     string output = "";
 
