@@ -8,11 +8,11 @@ bool isOp(char C) {
 int prio(char C)
 {
     if (C == '*')
-        return 1;
+        return 3;
     else if (C == '.')
         return 2;
     else if (C == '+')
-        return 3;
+        return 1;
     return -1;
 }
 
@@ -21,9 +21,11 @@ string infixToPrefix(string RE) {
     string output = "";
 
     // reverse string
+    // (A+B.C)* -> *(C.B+A)
     reverse(RE.begin(), RE.end());
 
     // replace '(' with ')' and vica versa
+    // *)C.B+A(
     for (int i = 0; i < RE.length(); i++) {
         if (RE[i] == '(')
             RE[i] = ')';
@@ -31,10 +33,11 @@ string infixToPrefix(string RE) {
             RE[i] = '(';
     }
 
-    // iterate over reveresed RE
+    // iterate over reversed RE
     for (int i = 0; i < RE.length(); i++) {
 
         // put symbols onto output string
+        // output = CBA
         if (isalpha(RE[i]) || isdigit(RE[i])) {
             output += RE[i];
         }
@@ -101,4 +104,79 @@ string infixToPrefix(string RE) {
     reverse(output.begin(), output.end());
 
     return output;
+}
+
+
+NFA::NFA(char operand) {
+
+    // & => epsilon / null
+    // - => empty / no transition
+    
+    vector<char> states { '&', operand};
+    vector<char> empty {'-', '-'};
+    
+    //delta holds 1 vector of 2 state NFA and an empty vector
+    _delta.push_back(states);
+    _delta.push_back(empty);
+
+    //1 is operand in <states>, transition to final
+    _finalStates.push_back(1);
+    _size = 2;
+}
+
+// 
+NFA::NFA(NFA M1, NFA M2, char op) {  
+    assert(isOp(op));
+
+    _size = M1._size + M2._size;
+    if (op == '+') {
+        
+    } 
+    else if (op == '.') {
+        //vector1.insert( vector1.end(), vector2.begin(), vector2.end() );
+        //length of nfa 1 in empty spaces before 
+        vector<vector<char>> delta = M1.getDelta();
+        for (int i = 0; i < delta.size(); i++) {
+            delta[i].resize(_size, '-');
+        }
+        delta.resize(_size, vector<char>(_size, '-'));
+        vector<int> M1F = M1.getFinalStates();
+        vector<int> M2F = M2.getFinalStates();
+        for (int i = 0; i < M1F.size(); i++) {
+            //change final states of M1 into epsilon transitions to starting states of M2
+            delta[M1F[i]][M1._size] = '&';
+        }
+        //think further
+        for (int i = 0; i < M2F.size(); i++) {
+            delta[M1._size][M2F[i] + M1._size];
+        }
+    } 
+    else if (op == '*') {
+
+    } 
+}
+
+void NFA::print() {
+    cout << "Printing delta function contents of NFA: " << endl;
+    for (int i = 0; i < _delta.size(); i++) {
+        for (int j = 0; j < _delta[i].size(); j++) {
+            if (_delta[i][j] != '&') {
+                cout << "delta[" << i << "][" << j << "] = " << _delta[i][j] << " ";
+            }
+        }
+        cout << endl;
+    }
+}
+
+int main() {
+    /*
+    string RE = "(A+B.C)*";
+    string prefix = infixToPrefix(RE);
+    cout << prefix << endl;
+    */
+    NFA M1('a');
+    M1.print();
+
+
+    return 0;
 }
