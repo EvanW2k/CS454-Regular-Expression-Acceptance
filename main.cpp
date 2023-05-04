@@ -9,14 +9,15 @@
  * 
  */
 
+#include <iostream>
+#include <string>
+#include <stack>
 #include "NFA.hpp"
 using namespace std;
 
-int priority(char C);
-bool isOperator(char C);
-string infixToPostfix(string RE);
+bool isOp(char c);
+int prio(char c);
 string infixToPrefix(string RE);
-
 /*
     2 inputs----------
         1) RE as string, with () > + > . > *
@@ -31,149 +32,76 @@ string infixToPrefix(string RE);
 */
 
 int main() {
-    cout << "test" << endl;
-    string RE = "x+y*z/w+u";
+    /*
+    string RE = "(A+B.C)*";
+    string prefix = infixToPrefix(RE);
+    cout << prefix << endl;
+    */
+    NFA M1('a');
+    NFA M2('b');
+    NFA M3(M1, '+', M2);
+    NFA M4('d');
+    NFA result(M3, '.', M4);
+    result.print();
+    
+   // result2.print();
+
+    //cout << "test" << endl;
+    //string RE = "x+y*z/w+u";
 
 
-    // get RE input
-    string RE = "";
-    bool readable = true;
+    //// get RE input
+    //string RE = "";
+    //bool readable = true;
 
-    // loop until
-    do {
+    //// loop until
+    //do {
 
-        // for new user input
-        if (!readable)
-            cout << "Please renter your Regualr Expression. Remember the rules.\n";
+    //    // for new user input
+    //    if (!readable)
+    //        cout << "Please renter your Regualr Expression. Remember the rules.\n";
 
-        // prompt and rules
-        cout << "Enter regular expression in a single line with these rules:\n"
-            << "1. \"+\" = union, \".\" = concatination, \"*\" = kleene star, \"&\" = epsilon), \"(\" and \")\" are parenthesis\n"
-            << "2. Must use \".\" wherever possible to distiunguish symbols, and symbols can only be lowercase w/ or w/o numbers\n\n" 
-            << "Enter Regular Expression: ";
+    //    // prompt and rules
+    //    cout << "Enter regular expression in a single line with these rules:\n"
+    //        << "1. \"+\" = union, \".\" = concatination, \"*\" = kleene star, \"&\" = epsilon), \"(\" and \")\" are parenthesis\n"
+    //        << "2. Must use \".\" wherever possible to distiunguish symbols, and symbols can only be lowercase w/ or w/o numbers\n\n"
+    //        << "Enter Regular Expression: ";
 
-        cin >> RE;
+    //    cin >> RE;
 
-        //confirm readable RE
-        for (int i = 0; i < RE.length(); i++) {
-            if (RE[i] == '+' || RE[i] == '&') { //only allowed uppercase symbol
-                continue;
-            }
-            else if (isalpha(RE[i])) {
-                RE[i] = tolower(RE[i]);
-            }
-            /*
-            if (RE[i] != '(' || RE[i] != ')' || RE[i] != '.' || RE[i] != '*') {
-                cerr << "Invalid input. Allowed characters [a-z, A-Z, (), ., *, +]" << endl;
-                exit(1);
-            }
-            */
-        }
+    //    //confirm readable RE
+    //    for (int i = 0; i < RE.length(); i++) {
+    //        if (RE[i] == '+' || RE[i] == '&') { //only allowed uppercase symbol
+    //            continue;
+    //        }
+    //        else if (isalpha(RE[i])) {
+    //            RE[i] = tolower(RE[i]);
+    //        }
+    //        /*
+    //        if (RE[i] != '(' || RE[i] != ')' || RE[i] != '.' || RE[i] != '*') {
+    //            cerr << "Invalid input. Allowed characters [a-z, A-Z, (), ., *, +]" << endl;
+    //            exit(1);
+    //        }
+    //        */
+    //    }
 
-    } while (!readable);
+    //} while (!readable);
 
 
-    // get string to test in RE
-    string w = "";
-    cout << "Enter string w to be tested against given regular expression: " << endl;
-    cin >> w;
-    //confirm readable string
-    for (int i = 0; i < w.length(); i++) {
-        if (isalpha(w[i])) {
-            w[i] = tolower(w[i]);
-        }
-        else {
-            cerr << "Invalid input. Allowed characters [a-z, A-Z]." << endl;
-            exit(1);
-        }
-    }
+    //// get string to test in RE
+    //string w = "";
+    //cout << "Enter string w to be tested against given regular expression: " << endl;
+    //cin >> w;
+    ////confirm readable string
+    //for (int i = 0; i < w.length(); i++) {
+    //    if (isalpha(w[i])) {
+    //        w[i] = tolower(w[i]);
+    //    }
+    //    else {
+    //        cerr << "Invalid input. Allowed characters [a-z, A-Z]." << endl;
+    //        exit(1);
+    //    }
+    //}
 
     return 0;
-}
-
-int priority(char C) {
-    if (C == '*')
-        return 1;
-    else if (C == '.')
-        return 2;
-    else if (C == '+')
-        return 3;
-    return -1;
-}
-
-bool isOperator(char C) {
-    return (C == '+' || C == '.' || C == '*' || C == '(' || C == ')') ? true : false;
-}
-
-string infixToPostfix(string RE) {
-    RE = '(' + RE + ')';
-    int l = RE.length();
-    stack<char> charStack;
-    string output = "";
-
-    for (int i = 0; i < l; i++) {
-        // if char is part of symbol add it to output
-        if (isalpha(RE[i]) || isdigit(RE[i]))
-            output += RE[i];
-
-        // if char is '(' push to stack
-        else if (RE[i] == '(')
-            charStack.push(RE[i]);
-
-        // if char is ')' add and pop stack to output until '('
-        else if (RE[i] == ')') {
-            while (charStack.top() != '(') {
-                output += charStack.top();
-                charStack.pop();
-            }
-
-            // remove '(' from stack
-            charStack.pop();
-        }
-
-        // when op is found
-        else {
-            if (isOperator(charStack.top())) {
-                if (RE[i] == '*') {
-                    while (priority(RE[i]) <= charStack.top()) {
-                        output += charStack.top();
-                        charStack.pop();
-                    }
-                }
-                else {
-                    while (priority(RE[i]) < charStack.top()) {
-                        output += charStack.top();
-                        charStack.pop();
-                    }
-                }
-                charStack.push(RE[i]);
-            }
-        }
-    }
-
-    while (!charStack.empty()) {
-        output += charStack.top();
-        charStack.pop();
-    }
-
-    return output;
-}
-
-string infixToPrefix(string RE) {
-    //Reverse string and swap ( with ), etc
-    //get postfix
-    //reverse postfix
-    int l = RE.length();
-
-    //reverse infix
-    reverse(RE.begin(), RE.end());
-
-    //Replace ( with ) VV
-    for (int i = 0; i < l; i++) {
-        if (RE[i] == '(') RE[i] = ')';
-        else if (RE[i] == ')') RE[i] = '(';
-    }
-    string prefix = infixToPostfix(RE);
-    reverse(prefix.begin(), prefix.end());
-    return prefix;
 }
