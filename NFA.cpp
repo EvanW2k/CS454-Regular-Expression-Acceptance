@@ -247,13 +247,18 @@ void NFA::removeEpsilon() {
                 _delta[i].erase(_delta[i].begin() + j);
                 for (int k = 0; k < _delta[dst].size(); k++) {
                     //transition from source to all possible states reached from destination
-                    _delta[i].push_back(_delta[dst][k]);
+                    
+                    // don't push if the pair has same destination and an epsilon transition
+                    if (!(get<0>(_delta[dst][k]) == i && get<1>(_delta[dst][k]) == '&')) {
+                        _delta[i].push_back(_delta[dst][k]);
 
-                    //CAN BE OPTIMIZED
-                    if (get<1>(_delta[dst][k]) == '&') {
-                        cout << "restarting at " << dst << ", " << k << endl;
-                        restart = true;
+                        //CAN BE OPTIMIZED
+                        if (get<1>(_delta[dst][k]) == '&') {
+                            cout << "restarting at " << dst << ", " << k << endl;
+                            restart = true;
+                        }
                     }
+                      
                 }
                 if (restart) {
                     j = _delta[dst].size();
