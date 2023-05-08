@@ -116,8 +116,9 @@ NFA::NFA(char operand) {
     _finalStates.push_back(1);  // for single operand constructor state 1 will be the final state
     _startState = 0;
 
-    _delta.push_back(vector<pair<int, char>> { {0,'&'} });  // push vector with epsilon transition 
-    _delta.push_back(vector<pair<int, char>> { {1, '&'}, {0, operand} });  // push vector with operand transition 
+   _delta.resize(2, vector<pair<int, char>> {});
+   _delta[0].push_back(pair<int, char> {1, operand});
+
 
     _size = _delta.size();  // 2
   
@@ -130,8 +131,7 @@ NFA::NFA(NFA M1, char op, NFA M2) {     // M2 has a default value to make it an 
     // UNION
     if (op == '+') {
         // start new NFA with 1 state then copy an incremented M1 to delta, and finals
-
-        _delta.push_back(vector<pair<int, char>> {{0, '&'}});
+        _delta.resize(1, vector<pair<int, char>> {});
         _size = 1;      
         _startState = 0;
 
@@ -153,7 +153,7 @@ NFA::NFA(NFA M1, char op, NFA M2) {     // M2 has a default value to make it an 
         }
 
         // add transition from new start state to old M1 start state
-        _delta[M1.getStart() + 1].push_back({ 0,'&'});
+        _delta[0].push_back({ M1.getStart()+1, '&'});
 
         // Now concatenate M2 into new NFA with adjusted states
         for (int i = 0; i < M2.getSize(); i++) {
@@ -174,7 +174,7 @@ NFA::NFA(NFA M1, char op, NFA M2) {     // M2 has a default value to make it an 
         }
 
         // add transition from new start state to old M2 start state
-        _delta[M2.getStart() + M1.getSize() + 1].push_back({ 0,'&' });
+        _delta[0].push_back({M2.getStart() + M1.getSize() + 1, '&'});
 
 
     }
@@ -202,7 +202,7 @@ NFA::NFA(NFA M1, char op, NFA M2) {     // M2 has a default value to make it an 
         // add epsilon transitions from final states of M1 to start state of M2
         for (int i = 0; i < M1.getFinalStates().size(); i++) {
             // add pair at M2 start state as it is represented in new NFA
-            _delta[M2.getStart() + M1.getSize()].push_back({M1.getFinalStates()[i],'&'});
+            _delta[M1.getFinalStates()[i]].push_back({M2.getStart() + M1.getSize(), '&'});
         }
 
         // make current final states the same as M2 final states + M1.size
@@ -225,16 +225,66 @@ NFA::NFA(NFA M1, char op, NFA M2) {     // M2 has a default value to make it an 
         // allow for empty string by mapping start state to each final state with an epsilon transition
         for (int i = 0; i < M1.getFinalStates().size(); i++) {
             // allow for empty string by mapping start state to each final state with an epsilon transition
-            _delta[M1.getFinalStates()[i]].push_back({ _startState,'&'});
+            _delta[_startState].push_back({M1.getFinalStates()[i], '&'});
             // allow a loop of the NFA by mapping final states to start state 
-            _delta[_startState].push_back({ M1.getFinalStates()[i],'&' });
+            _delta[M1.getFinalStates()[i]].push_back({_startState, '&'});
+        }
+    }
+    removeEpsilon();
+}
+/*
+*/
+void NFA::removeEpsilon() {
+    for (int i = 0; i < _delta.size(); i++) {
+        for (int j = _delta[i].size() - 1; j >= 0; j--) {
+            bool restart = false;
+            //if state i has transition to j via epsilon
+            if (get<1>(_delta[i][j]) == '&') {
+                //source = state = i
+                //destination = 
+                int dst = get<0>(_delta[i][j]);
+
+                _delta[i].erase(_delta[i].begin() + j);
+                for (int k = 0; k < _delta[dst].size(); k++) {
+                    //transition from source to all possible states reached from destination
+                    _delta[i].push_back(_delta[dst][k]);
+
+                    //CAN BE OPTIMIZED
+                    if (get<1>(_delta[dst][k]) == '&') {
+                        cout << "restarting at " << dst << ", " << k << endl;
+                        restart = true;
+                    }
+                }
+                if (restart) {
+                    j = _delta[dst].size();
+                }
+                if (isFinal(dst)) {
+                    _finalStates.push_back(i);
+                }
+            }
         }
     }
 }
 
+/*
+*/
+bool NFA::isFinal(int state) {
+    for (int i = 0; i < _finalStates.size(); i++) {
+        if (_finalStates[i] == state) return true;
+    }
+    return false;
+}
+
+/*
+*/
+
+
+
+
+
 void NFA::print() {
     for (int i = 0; i < _delta.size(); i++) {
-        cout << "Result in State " << i << ": ";
+        cout << "From state " << i << ": ";
         for (int j = 0; j < _delta[i].size(); j++) {
             cout << "(" << get<0>(_delta[i][j]) << ", " << get<1>(_delta[i][j]) << ") ";
         }

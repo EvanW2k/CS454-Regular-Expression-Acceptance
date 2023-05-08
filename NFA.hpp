@@ -22,6 +22,13 @@ public:
     NFA(NFA M1, char op, NFA M2 = NFA());
 
     ~NFA() {};
+
+    bool isFinal(int state);
+    void removeEpsilon();
+    //convertHelper
+    //std::pair<NFA, int> convert(int i, std::string x);
+    //bool accepts(std::string RE, std::string w);
+
     int getSize() { return _size; }
     int getStart() { return _startState; }
     std::vector<int> getFinalStates() { return _finalStates; }

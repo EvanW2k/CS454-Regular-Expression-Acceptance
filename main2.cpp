@@ -12,7 +12,7 @@
 #include <iostream>
 #include <string>
 #include <stack>
-//#include "NFA.hpp"
+#include "NFA.hpp"
 using namespace std;
 
 bool isOp(char c);
@@ -32,10 +32,23 @@ string infixToPrefix(string RE);
 */
 
 int main() {
+    /*
     string RE = "(A+B.C)*";
     string prefix = infixToPrefix(RE);
-
     cout << prefix << endl;
+    */
+
+
+    // ((a+b).d)*
+    NFA M1('a');
+    NFA M2('b');
+    NFA M3(M1, '+', M2);
+    //M3.print();
+    //M3.removeEpsilon();
+    //M3.print();
+    NFA M4('d');
+    NFA result(M3, '.', M4);
+    NFA kleene(result, '*');
     return 0;
 }
 
