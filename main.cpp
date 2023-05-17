@@ -1,91 +1,29 @@
-/* 
- * main.cpp
- * 
+/*
+ * File: main.cpp
+ *
  * CS-454 Final Project
- * Evan Walters, Sean Sponsler
+ * Modified by: Evan Walters, Sean Sponsler
  * Date: May 15th, 2023
- * Description: Takes input of a Regular Expression as well as a string.
- *  Determnines if the string is accepted by the Regualar Expression
- * 
+ * DESC: This program takes input of a Regular Expression as well as a string
+ *       and Determnines if the string is accepted by the Regualar Expression.
+ *
  */
+
 
 #include <iostream>
 #include <string>
-#include <stack>
 #include "NFA.hpp"
 using namespace std;
 
-bool isOp(char c);
-int prio(char c);
-string infixToPrefix(string RE);
-/*
-    2 inputs----------
-        1) RE as string, with () > + > . > *
-        2) String w to test acceptance
 
-    Three steps are involved in solving this problem:
-        1. convert the regular expression to an E-NFA
-            - first create prefix string of RE
-            - than create and combine NFA objects through prefix string
-        2. remove E-moves 
-        3. Test if w is accepted by the E-free NFA.
-*/
-pair<NFA, int> convertHelper(int i, string w) {
-    //.ab
-    if (!isOp(w[i])) {
-        return pair<NFA, int> {NFA(w[i]), i+1};
-    }
-    char op = w[i];
-    if (op == '+' || op == '.') {
-        pair<NFA, int> p = convertHelper(i+1, w);
-        pair<NFA, int> q = convertHelper(get<1>(p),w);
-        NFA M(get<0>(p), op, get<0>(q));
-        return pair<NFA, int> {M, get<1>(q)};
-    }
-    else {
-        //kleene star / unary
-        pair<NFA, int> p = convertHelper(i+1, w);
-        NFA M(get<0>(p), op);
-        return pair<NFA, int> {M, get<1>(p)};
-    }
-}
-
-NFA convert(string w) {
-    return get<0>(convertHelper(0, w));
-}
-
-bool accepts(std::string RE, std::string w) {
-    RE = infixToPrefix(RE);
-    cout << "RE: " << RE << endl;
-    NFA M = convert(RE);
-    //M.removeEpsilon();
-    M.print();
-    return false;
-    //parse through M with w via BFS
-}
-
+// Sean, make sure there is a loop so the user can enter as many as they would like, make it stop when % or something is used as the RE
 
 int main() {
-    /*
-    string RE = "(A+B.C)*";
-    string prefix = infixToPrefix(RE);
-    cout << prefix << endl;
-    */
 
+    //accepts("((a+b).d)*", "adadadadbdbdadadadadadadadadbdbdbdbdbdbdbdbdbdbdbdbd");
+    accepts("(a+b.c)*", "&");
+    //accepts("(a)*", "a");
 
-    // ((a+b).d)*
-    accepts("(a+b.c)*","a");
-
-    NFA M1('a');
-    NFA M2('b');
-    NFA M3(M1, '+', M2);
-    //M3.print();
-    //M3.removeEpsilon();
-    //M3.print();
-    NFA M4('d');
-    NFA result(M3, '.', M4);
-    NFA kleene(result, '*');
-    //result.print();
 
     //cout << "test" << endl;
     //string RE = "x+y*z/w+u";
