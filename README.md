@@ -1,22 +1,34 @@
 # CS454-Final
-Prob 6
+Created by: Sean Sponsler and Evan Walters
+Problem 6
+DUE: May 20th, 2023
 
-Implement a program that tests membership of a given string w in a regular expression R.
-Specifically, your program will take as input a regular expression (such as (a ∪ a.b)*.(a ∪ E) and a
-string w = abaab, and outputs ‘yes’ if w is in L(R), ‘no’ else. 
+This program takes as input a regular expression, and a string. Then there is an output 
+determining if the string is accepted by the regualr expression.
 
-Three steps are involved in solving this problem: 
-1) convert the regular expression to an E-NFA 
-2) remove E-moves and 
-3) Test if w is accepted by the E-free NFA.
+The program converts the given RE (regualr expression) to an NFA that is then used in conjunction
+with the input string to determine if the string is accepted. The program loops for 
+continued input. 
 
-Solution:
-RE -> E-NFA -> NFA
-parse through given NFA and convert into smaller NFAs given operator precedence
+The regular expression uses only the operations:
+- Concatenation: .
+- Union: +
+- Kleen Star: *
+- Parenthesis: ( and )
+
+The symbols the regular expression uses may be any single characters other than the above operators.
+With the exception that & represents epsilon.
+
+Algorithms Used in program:
+- InFix to Prefix of RE
+- Prefix RE to &-NFA
+- &-NFA to NFA
+- Breadth first search with input string and NFA
+
+Sample Inputs and Outputs:
+
+#1
 
 
-Possible solutions:
-1) turn RE into a tree, BFS tree with w
-2) RE -> E-NFA -> NFA
-  i) Slide 24: Create NFA objects, that you can combine via function: combine (NFA1, NFA2, operation)
-4) Check w by parse RE for each character 
+
+
