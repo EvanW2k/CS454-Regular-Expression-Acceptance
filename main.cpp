@@ -21,66 +21,93 @@ using namespace std;
 int main() {
 
     //accepts("((a+b).d)*", "adadadadbdbdadadadadadadadadbdbdbdbdbdbdbdbdbdbdbdbd");
-    accepts("(a+b.c)*", "&");
+    //accepts("(a+b.c)*", "&");
     //accepts("(a)*", "a");
-
 
     //cout << "test" << endl;
     //string RE = "x+y*z/w+u";
 
-
     //// get RE input
-    //string RE = "";
-    //bool readable = true;
+    string RE = "";
+    string w = "";
+    bool readable = true;
 
     //// loop until
-    //do {
+    do {
 
-    //    // for new user input
-    //    if (!readable)
-    //        cout << "Please renter your Regualr Expression. Remember the rules.\n";
+        // for new user input
+        if (!readable)
+            cout << "Regular expression is not readable. \n";
 
-    //    // prompt and rules
-    //    cout << "Enter regular expression in a single line with these rules:\n"
-    //        << "1. \"+\" = union, \".\" = concatination, \"*\" = kleene star, \"&\" = epsilon), \"(\" and \")\" are parenthesis\n"
-    //        << "2. Must use \".\" wherever possible to distiunguish symbols, and symbols can only be lowercase w/ or w/o numbers\n\n"
-    //        << "Enter Regular Expression: ";
+        // prompt and rules
+        cout << "Enter regular expression in a single line with these rules:\n"
+            << "1. \"+\" = union, \".\" = concatenation, \"*\" = kleene star, \"&\" = epsilon/null, \"(\" and \")\" are parentheses\n"
+            << "2. Must use \".\" wherever possible to distinguish symbols, and symbols can only be lowercase with or without numbers\n\n"
+            << "Enter Regular Expression(% to quit): ";
 
-    //    cin >> RE;
+        cin >> RE;
+        if (RE == "%") {
+            return 0;
+        }
 
-    //    //confirm readable RE
-    //    for (int i = 0; i < RE.length(); i++) {
-    //        if (RE[i] == '+' || RE[i] == '&') { //only allowed uppercase symbol
-    //            continue;
-    //        }
-    //        else if (isalpha(RE[i])) {
-    //            RE[i] = tolower(RE[i]);
-    //        }
-    //        /*
-    //        if (RE[i] != '(' || RE[i] != ')' || RE[i] != '.' || RE[i] != '*') {
-    //            cerr << "Invalid input. Allowed characters [a-z, A-Z, (), ., *, +]" << endl;
-    //            exit(1);
-    //        }
-    //        */
-    //    }
+        //confirm readable RE
+        for (int i = 0; i < RE.length(); i++) {
+            //if (RE[i] == '(' || RE[i] == ')') { //only allowed uppercase symbol
+            //    continue;
+            //}
+            if (isalpha(RE[i])) {
+                RE[i] = tolower(RE[i]);
+                continue;
+            }
+            
+            else if (RE[i] != '(' && RE[i] != ')' && RE[i] != '.' && RE[i] != '*' && RE[i] != '+' && RE[i] != '&') {
+                cerr << "Invalid input. Allowed characters [a-z, A-Z, (), ., *, +]. Invalid character: " << RE[i] <<  "\n" << endl;
+                exit(1);
+                //readable = false;
+                //break;
+                //exit(1);
+            }
+        }
+        //cout << "\n";
+        cout << "Enter string w to be tested for acceptance against given Regular Expression using only alphabetical characters(% to quit): ";
+        cin >> w;
+        if (w == "%") {
+            return 0;
+        }
+        //cout << "\n";
+        for (int i = 0; i < w.length(); i++) {
+            if (isalpha(w[i])) {
+                w[i] = tolower(w[i]);
+            }
+            else {
+                cerr << "Invalid input. Allowed characters [a-z, A-Z] \n" << endl;
+                exit(1);
+                //readable = false;
+                //break;
+            }
+        }
+        cout << "\n\n";
+        accepts(RE, w);
+        cout << "\n\n";
+    } while (readable);
 
-    //} while (!readable);
 
-
-    //// get string to test in RE
-    //string w = "";
-    //cout << "Enter string w to be tested against given regular expression: " << endl;
-    //cin >> w;
-    ////confirm readable string
-    //for (int i = 0; i < w.length(); i++) {
-    //    if (isalpha(w[i])) {
-    //        w[i] = tolower(w[i]);
-    //    }
-    //    else {
-    //        cerr << "Invalid input. Allowed characters [a-z, A-Z]." << endl;
-    //        exit(1);
-    //    }
-    //}
+    // get string to test in RE
+    /*
+    string w = "";
+    cout << "Enter string w to be tested against given regular expression: " << endl;
+    cin >> w;
+    //confirm readable string
+    for (int i = 0; i < w.length(); i++) {
+        if (isalpha(w[i])) {
+            w[i] = tolower(w[i]);
+        }
+        else {
+             cerr << "Invalid input. Allowed characters [a-z, A-Z]." << endl;
+            exit(1);
+        }
+    }
+    */
 
     return 0;
 }

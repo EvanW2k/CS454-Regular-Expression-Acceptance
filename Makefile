@@ -1,6 +1,6 @@
-OBJS	= main.o NFA.o State.o
-SOURCE	= main.cpp NFA.cpp State.cpp
-HEADER	= NFA.hpp State.hpp
+OBJS	= main.o NFA.o
+SOURCE	= main.cpp NFA.cpp
+HEADER	= NFA.hpp
 OUT	= main
 CC	 = g++
 FLAGS	 = -g -c -Wall
@@ -14,10 +14,6 @@ main.o: main.cpp
 
 NFA.o: NFA.cpp
 	$(CC) $(FLAGS) NFA.cpp 
-
-State.o: State.cpp
-	$(CC) $(FLAGS) State.cpp 
-
-
+	
 clean:
 	rm -f $(OBJS) $(OUT)

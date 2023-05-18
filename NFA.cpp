@@ -15,8 +15,6 @@ using namespace std;
 // FUNCTIONS FOR NFA CLASS                                          |
 //-------------------------------------------------------------------
 
-
-
 //********************************************************************************
 // Function: simple NFA parameterized constructor
 // In: a single character operand
@@ -37,10 +35,6 @@ NFA::NFA(char operand) {
     _size = _delta.size();  // 2
 
 }
-
-
-
-
 
 //********************************************************************************
 // Function: NFA parameterized constructor
@@ -162,10 +156,6 @@ NFA::NFA(NFA M1, char op, NFA M2) {     // M2 has a default value to make it an 
     removeEpsilon();
 }
 
-
-
-
-
 //********************************************************************************
 // Function: removeEpsilon
 // In: none
@@ -212,10 +202,6 @@ void NFA::removeEpsilon() {
     }
 }
 
-
-
-
-
 //********************************************************************************
 // Function: bfs (breadth fist search)
 // In: a string to test acceptance with the NFA
@@ -252,10 +238,6 @@ bool NFA::bfs(string input) {
     return false;
 }
 
-
-
-
-
 //********************************************************************************
 // Function: isFinal
 // In: a number for a state
@@ -282,10 +264,6 @@ bool NFA::isFinal(int state) {
     return false;
 }
 
-
-
-
-
 //********************************************************************************
 // Function: addFinalState
 // In: a state number
@@ -302,10 +280,6 @@ void NFA::addFinalState(int state) {
         _finalStates.push_back(state);
 
 }
-
-
-
-
 
 //********************************************************************************
 // Function: print (used for testing)
@@ -328,14 +302,9 @@ void NFA::print() {
     }
     cout << endl;
 }
-
-
-
 //-------------------------------------------------------------------
 // FUNCTIONS FOR UTILITY / MAIN USAGE                               |
 //-------------------------------------------------------------------
-
-
 
 //********************************************************************************
 // Function: accepts
@@ -344,23 +313,20 @@ void NFA::print() {
 // DESC: Outputs a statement based on if the string w is accepted by the RE
 //********************************************************************************
 void accepts(string RE, string w) {
+    string temp = w;
     string prefixRE = infixToPrefix(RE);
     NFA M = convert(prefixRE);
     bool accept = M.bfs(w);
     //M.print();
 
     if (accept == true) {
-        cout << "The string: " << w << "\nIs accepted by the RE: " << RE << endl;
+        cout << "The string: " << w << "\nIs ACCEPTED by the RE: " << RE << endl;
     }
     else {
-        cout << "The string: " << w << "\nIs not accepted by the RE: " << RE << endl;
+        cout << "The string: " << w << "\nIs NOT ACCEPTED by the RE: " << RE << endl;
     }
 
 }
-
-
-
-
 
 //********************************************************************************
 // Function: isOp
@@ -371,10 +337,6 @@ void accepts(string RE, string w) {
 bool isOp(char C) {
     return (C == '+' || C == '.' || C == '*') ? true : false;
 }
-
-
-
-
 
 //********************************************************************************
 // Function: prio
@@ -392,10 +354,6 @@ int prio(char C)
         return 1;
     return -1;
 }
-
-
-
-
 
 //********************************************************************************
 // Function: infixToPrefix
@@ -495,10 +453,6 @@ string infixToPrefix(string RE) {
     return output;
 }
 
-
-
-
-
 //********************************************************************************
 // Function: convert
 // In: a string of a prefixed regular expression
@@ -508,9 +462,6 @@ string infixToPrefix(string RE) {
 NFA convert(string w) {
     return get<0>(convertHelper(0, w));
 }
-
-
-
 
 //********************************************************************************
 // Function: convertHelper
