@@ -1,0 +1,16 @@
+Sean Sponlser
+- Determined our file hiearchy and general program strucure
+- implemented main.cpp including input and loop
+- main testor
+- recursive convert function
+
+Evan Walters
+- NFA constructors
+- came up with data structure: 2D vector of pairs (resulting state, transition operand)
+- bfs (breadth first seach) function
+- infix to prefix function for regualr expresion
+
+Togethor
+- removeEpsilon function for &-NFA -> NFA
+- documentation
+- wrote up and explained ideas, often with pciture of hand done NFAs and &-NFAs
