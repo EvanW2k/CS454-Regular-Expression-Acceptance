@@ -27,7 +27,9 @@ int main() {
     //// get RE input
     string RE = "";
     string w = "";
+    
     bool readable = true;
+    
 
     //// loop until
     do {
@@ -96,10 +98,9 @@ int main() {
             cout << "\n\n";
             accepts(RE, w);
         }
-
-
         //cout << "\n\n";
     } while (readable);
+
 
     return 0;
 }

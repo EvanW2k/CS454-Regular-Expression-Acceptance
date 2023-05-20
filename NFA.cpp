@@ -375,9 +375,22 @@ string infixToPrefix(string RE) {
                 continue;
             }
         }
+        //specific fix for *a*
+        else if (RE.length() == 3) {
+            if (RE[i] == '*' && (i+2) < RE.length()) {
+                if ((RE[i+1] == ')' || isalpha(RE[i+1]) || isdigit(RE[i+1])) && RE[i+2] == '*') {
+                    RE.insert(i+2, ".");
+                }
+            }
+        }
+        else if (RE[i] == '*' && (i+2) < RE.length()) {
+            if ((RE[i+1] == ')') && RE[i+2] == '*') {
+                RE.insert(i+2, ".");
+            }
+        }
         //((a.b)c)
-        else if (RE[i] == ')' && (i+1) < RE.length()) {
-            if (isalpha(RE[i+1]) || isdigit(RE[i+1])) {
+        else if ((RE[i] == ')' || RE[i] == '*') && (i+1) < RE.length()) {
+            if (isalpha(RE[i+1]) || isdigit(RE[i+1]) || RE[i+1] == '(') {
                 RE.insert(i+1, ".");
                 continue;
             }
@@ -468,6 +481,7 @@ string infixToPrefix(string RE) {
     reverse(output.begin(), output.end());
 
     // example *+A.BC
+    //cout << "output: " << output << endl;
     return output;
 }
 
