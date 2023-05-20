@@ -369,21 +369,21 @@ string infixToPrefix(string RE) {
     for (int i = 0; i < RE.length(); i++) {
         //check for consecutive terminal symbols or alpha near paren
         //(abc) and a(b.c) 
-        if (isalpha(RE[i]) && i < (RE.length() + 1)) {
-            if (isalpha(RE[i+1]) || RE[i+1] == '(') {
+        if ((isalpha(RE[i]) || isdigit(RE[i])) && (i+1) < RE.length()) {
+            if ((isalpha(RE[i+1]) || isdigit(RE[i+1])) || RE[i+1] == '(') {
                 RE.insert(i+1, ".");
                 continue;
             }
         }
         //((a.b)c)
-        else if (RE[i] == ')' && i < (RE.length() + 1)) {
-            if (isalpha(RE[i+1])) {
+        else if (RE[i] == ')' && (i+1) < RE.length()) {
+            if (isalpha(RE[i+1]) || isdigit(RE[i+1])) {
                 RE.insert(i+1, ".");
                 continue;
             }
         }
     }
-    cout << "Formatted RE after concat insertion: " << RE << std::endl;
+    //cout << "Formatted RE after concat insertion: " << RE << std::endl;
 
     // reverse string
     // example: (A+B.C)* -> *(C.B+A)
