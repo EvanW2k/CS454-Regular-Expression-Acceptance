@@ -16,7 +16,7 @@ The regular expression uses only the operations:
 - Kleen Star: *
 - Parenthesis: ( and )
 
-The symbols the regular expression uses may be any letter (cap or uncap) or any numver.
+The symbols the regular expression uses may be any letter (cap or uncap) or any number.
 With the exception that & represents epsilon.
 
 Algorithms Used in program:
