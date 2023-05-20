@@ -3,7 +3,7 @@ SOURCE	= main.cpp NFA.cpp
 HEADER	= NFA.hpp
 OUT	= main
 CC	 = g++
-FLAGS	 = -g -c -Wall
+FLAGS	 = -g -c -Wall -Wsign-compare
 LFLAGS	 = 
 
 all: $(OBJS)
