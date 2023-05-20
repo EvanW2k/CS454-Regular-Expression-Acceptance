@@ -1,11 +1,14 @@
 /*
  * File: NFA.hpp
- * 
+ *
  * Modified by: Sean Sponsler and Evan Waletrs
  * Date: May 20th, 2023
  * DESC: This file contians the description of a class named NFA, as well as
  *       other functions for utility/main usage.
  */
+
+#ifndef NFA_HPP
+#define NFA_HPP
 
 #include <iostream>
 #include <vector>
@@ -33,13 +36,13 @@ public:
     void addFinalState(int state);
 
     // inline set functions
-    void setFinalStates(std::vector<int> final) { _finalStates = final; } 
-    void setDelta(std::vector<std::vector<std::pair<int, char>>> delta) { _delta = delta; } 
+    void setFinalStates(std::vector<int> final) { _finalStates = final; }
+    void setDelta(std::vector<std::vector<std::pair<int, char>>> delta) { _delta = delta; }
 
     // inline get functions
-    int getSize() { return _size; }                      
-    int getStart() { return _startState; }   
-    std::vector<int> getFinalStates() { return _finalStates; }                        
+    int getSize() { return _size; }
+    int getStart() { return _startState; }
+    std::vector<int> getFinalStates() { return _finalStates; }
     std::vector<std::vector<std::pair<int, char>>> getDelta() { return _delta; }
 
     // print function for testing
@@ -63,3 +66,6 @@ int prio(char c);
 std::string infixToPrefix(std::string RE);
 NFA convert(std::string w);
 std::pair<NFA, int> convertHelper(int i, std::string w);
+
+
+#endif
