@@ -366,6 +366,25 @@ string infixToPrefix(string RE) {
     stack <char> s;
     string output = "";
 
+    for (int i = 0; i < RE.length(); i++) {
+        //check for consecutive terminal symbols or alpha near paren
+        //(abc) and a(b.c) 
+        if (isalpha(RE[i]) && i < (RE.length() + 1)) {
+            if (isalpha(RE[i+1]) || RE[i+1] == '(') {
+                RE.insert(i+1, ".");
+                continue;
+            }
+        }
+        //((a.b)c)
+        else if (RE[i] == ')' && i < (RE.length() + 1)) {
+            if (isalpha(RE[i+1])) {
+                RE.insert(i+1, ".");
+                continue;
+            }
+        }
+    }
+    cout << "Formatted RE after concat insertion: " << RE << std::endl;
+
     // reverse string
     // example: (A+B.C)* -> *(C.B+A)
     reverse(RE.begin(), RE.end());
@@ -381,7 +400,6 @@ string infixToPrefix(string RE) {
 
     // iterate over reversed RE
     for (int i = 0; i < RE.length(); i++) {
-
         // case alpha or digit or &: put operands onto output string
             // example :output = CBA
         if (isalpha(RE[i]) || isdigit(RE[i]) || RE[i] == '&') {
