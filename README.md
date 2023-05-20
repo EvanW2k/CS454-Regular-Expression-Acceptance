@@ -1,33 +1,45 @@
-# CS454-Final
+CS454-Final-Problem-6
 Created by: Sean Sponsler and Evan Walters
-Problem 6
 DUE: May 20th, 2023
 
-This program takes as input a regular expression, and a string. Then there is an output 
-determining if the string is accepted by the regualr expression.
+-----SEE PROJECT REPORT FOR FULL EXPLANATIONS-----
 
-The program converts the given RE (regualr expression) to an NFA that is then used in conjunction
+This program takes as input a regular expression, and a string. Then there is an output 
+determining if the string is accepted by the regular expression.
+
+The program converts the given RE (regular expression) to an NFA that is then used in conjunction
 with the input string to determine if the string is accepted. The program loops for 
 continued input. 
 
 The regular expression uses only the operations:
 - Concatenation: .
 - Union: +
-- Kleen Star: *
+- Kleene Star: *
 - Parenthesis: ( and )
 
 The symbols the regular expression uses may be any letter (cap or uncap) or any number.
 With the exception that & represents epsilon.
 
-Algorithms Used in program:
-- InFix to Prefix of RE
-- Prefix RE to &-NFA
-- &-NFA to NFA
-- Breadth first search with input string and NFA
 
-Sample Inputs and Outputs:
+-----Constributions -----------------------------
+Sean Sponlser
+- Determined our file hiearchy and general program strucure
+- implemented main.cpp including input and loop
+- main testor/bug fixer
+- recursive convert function
 
-#1
+Evan Walters
+- NFA constructors
+- came up with data structure: 2D vector of pairs (resulting state, transition operand)
+- bfs (breadth first seach) function
+- infix to prefix function for regualr expresion
+
+Togethor
+- removeEpsilon function for &-NFA -> NFA
+- documentation
+- wrote up and explained ideas, often with picture of hand done NFAs and &-NFAs
+- Project report
+- bug fixing
 
 
 
