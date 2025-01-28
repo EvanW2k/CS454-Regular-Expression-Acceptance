@@ -86,7 +86,6 @@ int main() {
         else {
             // check w for invalid characters
             for (int i = 0; i < w.length(); i++) {
-                cout << w[i] << endl;
                 if (!isalpha(w[i]) && !isdigit(w[i]) && w[i] != '&') {
                     cerr << "Invalid input. Allowed characters [a-z, A-Z, 0-9] \n" << endl;
                     exit(1);
