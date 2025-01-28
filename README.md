@@ -21,7 +21,8 @@ The symbols the regular expression uses may be any letter (cap or uncap) or any 
 With the exception that & represents epsilon.
 
 
------Constributions -----------------------------
+-----Constributions ----------------------------- 
+
 Sean Sponlser
 - Determined our file hiearchy and general program strucure
 - implemented main.cpp including input and loop
