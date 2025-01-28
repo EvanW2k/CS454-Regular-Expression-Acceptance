@@ -32,7 +32,7 @@ Evan Walters
 - NFA constructors
 - came up with data structure: 2D vector of pairs (resulting state, transition operand)
 - bfs (breadth first seach) function
-- infix to prefix function for regualr expresion
+- infix to prefix function for regular expresion
 
 Togethor
 - removeEpsilon function for &-NFA -> NFA
