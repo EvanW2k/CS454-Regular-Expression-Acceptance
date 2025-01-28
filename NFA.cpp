@@ -499,7 +499,7 @@ NFA convert(string w) {
 
 //********************************************************************************
 // Function: convertHelper
-// In: Int for position in string w (base case = 0),  
+// In: Int for position in string w,
 //     A string of a prefixed regular expression
 // Return: Pair (NFA, int)
 //         An NFA to be further added to and modified, 
@@ -510,7 +510,7 @@ NFA convert(string w) {
 //********************************************************************************
 pair<NFA, int> convertHelper(int i, string w) {
     
-    // operand case
+    // operand case (base case)
     if (!isOp(w[i])) {
         return pair<NFA, int> {NFA(w[i]), i + 1}; // create NFA with operand, inc i
     }
